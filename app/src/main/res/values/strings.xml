@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">BRAV Chat</string>
+    <string name="notification_channel_messages_name">Messages et discussions</string>
+    <string name="notification_channel_calls_name">Appels audio et vidéo</string>
+    <string name="notification_channel_social_name">Statuts et demandes de contact</string>
+    <string name="notification_channel_music_name">Lecteur musical BRAV Chat</string>
+    <string name="default_notification_channel_id">brav_messages_channel</string>
+</resources>

@@ -1,0 +1,207 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Private user account profile, phone registration, biometric preference, and app settings.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Firebase Auth UID of the owner." },
+        "displayName": { "type": "string", "description": "Full display name." },
+        "firstName": { "type": "string", "description": "First name." },
+        "lastName": { "type": "string", "description": "Last name." },
+        "bravId": { "type": "string", "description": "Unique BRAV CHAT handle." },
+        "phoneNumber": { "type": "string", "description": "E.164 phone number." },
+        "countryCode": { "type": "string", "description": "International dialing prefix (e.g., +225, +33)." },
+        "countryIso": { "type": "string", "description": "ISO 3166-1 alpha-2 country code." },
+        "bioStatus": { "type": "string", "description": "Personal status line." },
+        "avatarUrl": { "type": "string", "description": "Profile photo URL." },
+        "biometricEnabled": { "type": "boolean", "description": "Whether biometric lock is enabled." },
+        "pinHash": { "type": "string", "description": "SHA-256 hash of fallback PIN." },
+        "privacyLastSeen": { "type": "string", "enum": ["EVERYONE", "CONTACTS", "NOBODY"] },
+        "readReceipts": { "type": "boolean" },
+        "notificationsEnabled": { "type": "boolean" },
+        "themeMode": { "type": "string", "enum": ["SYSTEM", "LIGHT", "DARK"] },
+        "autoCompressMedia": { "type": "boolean" },
+        "noiseSuppressionEnabled": { "type": "boolean" },
+        "hdVideoCalls": { "type": "boolean" },
+        "aiAutoReplyEnabled": { "type": "boolean" },
+        "aiAutoReplyTone": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp." }
+      },
+      "required": ["userId", "displayName", "bravId", "createdAt", "updatedAt"]
+    },
+    "PublicDirectoryEntry": {
+      "title": "PublicDirectoryEntry",
+      "description": "Non-PII public lookup card for identifying BRAV CHAT users among phone contacts.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "displayName": { "type": "string" },
+        "bravId": { "type": "string" },
+        "phoneHash": { "type": "string", "description": "SHA-256 hex digest of normalized phone number." },
+        "avatarUrl": { "type": "string" },
+        "bioStatus": { "type": "string" },
+        "isOnline": { "type": "boolean" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "displayName", "bravId", "phoneHash", "updatedAt"]
+    },
+    "StatusPost": {
+      "title": "StatusPost",
+      "description": "24-hour ephemeral status update (text, image, or video).",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "authorAvatarUrl": { "type": "string" },
+        "type": { "type": "string", "enum": ["TEXT", "IMAGE", "VIDEO"] },
+        "textContent": { "type": "string" },
+        "backgroundColorHex": { "type": "string" },
+        "mediaDataUri": { "type": "string" },
+        "caption": { "type": "string" },
+        "viewCount": { "type": "integer" },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "expiresAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "authorName", "type", "viewCount", "isActive", "createdAt", "expiresAt"]
+    },
+    "StatusView": {
+      "title": "StatusView",
+      "description": "View and interaction record on a 24-hour status.",
+      "type": "object",
+      "properties": {
+        "viewerId": { "type": "string" },
+        "viewerName": { "type": "string" },
+        "reaction": { "type": "string" },
+        "viewedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["viewerId", "viewerName", "viewedAt"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Real-time BRAV CHAT conversation thread.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "peerUserId": { "type": "string" },
+        "peerPhone": { "type": "string" },
+        "peerAvatarUrl": { "type": "string" },
+        "lastMessage": { "type": "string" },
+        "lastMessageType": { "type": "string", "enum": ["TEXT", "IMAGE", "VIDEO", "AUDIO", "VOICE", "PDF", "DOCUMENT"] },
+        "isPinned": { "type": "boolean" },
+        "isArchived": { "type": "boolean" },
+        "unreadCount": { "type": "integer" },
+        "memberUids": { "type": "array", "description": "Participant UIDs (max 20)." },
+        "createdBy": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "memberUids", "createdBy", "createdAt", "updatedAt"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "Message inside a BRAV CHAT conversation supporting multimedia and documents.",
+      "type": "object",
+      "properties": {
+        "senderId": { "type": "string" },
+        "memberUids": { "type": "array" },
+        "type": { "type": "string", "enum": ["TEXT", "IMAGE", "VIDEO", "AUDIO", "VOICE", "PDF", "DOCUMENT"] },
+        "text": { "type": "string" },
+        "attachmentName": { "type": "string" },
+        "attachmentMimeType": { "type": "string" },
+        "attachmentSizeBytes": { "type": "integer" },
+        "attachmentLocalUri": { "type": "string" },
+        "attachmentThumbnailBase64": { "type": "string" },
+        "durationMs": { "type": "integer" },
+        "deliveryStatus": { "type": "string", "enum": ["SENDING", "SENT", "DELIVERED", "READ", "FAILED"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["senderId", "memberUids", "type", "deliveryStatus", "createdAt", "updatedAt"]
+    },
+    "CallLog": {
+      "title": "CallLog",
+      "description": "Audio and video call history entry.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "peerName": { "type": "string" },
+        "peerPhone": { "type": "string" },
+        "peerAvatarUrl": { "type": "string" },
+        "callType": { "type": "string", "enum": ["AUDIO", "VIDEO"] },
+        "direction": { "type": "string", "enum": ["INCOMING", "OUTGOING", "MISSED"] },
+        "durationSeconds": { "type": "integer" },
+        "noiseSuppressionUsed": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "peerName", "callType", "direction", "durationSeconds", "createdAt"]
+    },
+    "ActivityLog": {
+      "title": "ActivityLog",
+      "description": "Account security, login, and modification history entry.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "actionType": { "type": "string", "enum": ["LOGIN", "BIOMETRIC", "PROFILE_UPDATE", "SMS_DEFAULT", "DEVICE_SESSION", "CALL", "AI_ASSISTANT"] },
+        "title": { "type": "string" },
+        "deviceModel": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "actionType", "title", "deviceModel", "createdAt"]
+    },
+    "ConnectedDevice": {
+      "title": "ConnectedDevice",
+      "description": "Authenticated device session associated with the user account.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "deviceName": { "type": "string" },
+        "osVersion": { "type": "string" },
+        "isActive": { "type": "boolean" },
+        "lastActiveAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "deviceName", "osVersion", "isActive", "lastActiveAt", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Owner-isolated private user profiles and preferences."
+    },
+    "/public_directory/{phoneHash}": {
+      "schema": { "$ref": "#/entities/PublicDirectoryEntry" },
+      "description": "Public non-PII user cards keyed by SHA-256 phoneHash."
+    },
+    "/statuses/{statusId}": {
+      "schema": { "$ref": "#/entities/StatusPost" },
+      "description": "24-hour status posts."
+    },
+    "/statuses/{statusId}/views/{viewerId}": {
+      "schema": { "$ref": "#/entities/StatusView" },
+      "description": "Status view and reaction records."
+    },
+    "/conversations/{conversationId}": {
+      "schema": { "$ref": "#/entities/Conversation" },
+      "description": "Participant-scoped chat conversations."
+    },
+    "/conversations/{conversationId}/messages/{messageId}": {
+      "schema": { "$ref": "#/entities/ChatMessage" },
+      "description": "Messages belonging to a conversation."
+    },
+    "/users/{userId}/call_logs/{callId}": {
+      "schema": { "$ref": "#/entities/CallLog" },
+      "description": "Owner-scoped audio and video call history."
+    },
+    "/users/{userId}/activity_logs/{activityId}": {
+      "schema": { "$ref": "#/entities/ActivityLog" },
+      "description": "Owner-scoped account security and activity audit trail."
+    },
+    "/users/{userId}/devices/{deviceId}": {
+      "schema": { "$ref": "#/entities/ConnectedDevice" },
+      "description": "Owner-scoped active device sessions."
+    }
+  }
+}

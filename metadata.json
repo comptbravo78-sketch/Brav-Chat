@@ -1,0 +1,6 @@
+{
+  "name": "BRAV Chat",
+  "description": "Application de messagerie moderne et minimaliste avec statuts 24H, synchronisation des contacts, SMS/MMS par défaut, appels audio/vidéo HD et authentification biométrique.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
